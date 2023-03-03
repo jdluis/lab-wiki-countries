@@ -1,24 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function CountryDetails() {
   const [country, setCountry] = useState(null);
 
-  const { alpha3Code } = useParams();
+  let { countryIdentification } = useParams();
 
   useEffect(() => {
     getCountryByCode();
-  }, [alpha3Code]);
+  }, [countryIdentification]);
 
   const getCountryByCode = async () => {
     try {
       //me falla la forma de poner la variable en la peticion, si pongo eol nombre directo si me lo hace
       const response = await axios.get(
-        `https://ih-countries-api.herokuapp.com/countries/${alpha3Code}`
+        `https://ih-countries-api.herokuapp.com/countries/${countryIdentification}`
       );
-      console.log('AQUIUIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
       console.log(response.data);
       setCountry(response.data);
     } catch (err) {
@@ -29,62 +28,62 @@ function CountryDetails() {
   return (
     /*   <!-- Country Details (Bootstrap column) --> */
     <>
-      {country === null
-        ? 'Loading...'
-        : () => {
-            return (
-              <div className="col-7">
-                <h1>France</h1>
-                <table className="table">
-                  <thead></thead>
-                  <tbody>
-                    <tr>
-                      <td style={{ width: '30%' }}>Capital</td>
-                      <td>Paris</td>
-                    </tr>
-                    <tr>
-                      <td>Area</td>
-                      <td>
-                        551695 km
-                        <sup>2</sup>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Borders</td>
-                      <td>
-                        <ul>
+      {country === null ? (
+        'Loading...'
+      ) : (
+        <div key={country._id} className="col-7">
+          <h1>{country.name.official}</h1>
+          <table className="table">
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td style={{ width: '30%' }}>Capital</td>
+                <td>{country.capital[0]}</td>
+              </tr>
+              <tr>
+                <td>Area</td>
+                <td>{country.area}</td>
+              </tr>
+              <tr>
+                <td>Region</td>
+                <td>{country.region}</td>
+              </tr>
+              <tr>
+                <td>Borders</td>
+                <td>
+                  {country.borders.length === 0 ? (
+                    'Only the Sea'
+                  ) : (
+                    <ul>
+                      {country.borders.map((each) => {
+                        return (
                           <li>
-                            <a href="/AND">Andorra</a>
+                            <a href={`/countryDetails/${each}`}>{each}</a>
                           </li>
-                          <li>
-                            <a href="/BEL">Belgium</a>
-                          </li>
-                          <li>
-                            <a href="/DEU">Germany</a>
-                          </li>
-                          <li>
-                            <a href="/ITA">Italy</a>
-                          </li>
-                          <li>
-                            <a href="/LUX">Luxembourg</a>
-                          </li>
-                          <li>
-                            <a href="/MCO">Monaco</a>
-                          </li>
-                          <li>
-                            <a href="/ESP">Spain</a>
-                          </li>
-                          <li>
-                            <a href="/CHE">Switzerland</a>
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            );
-          }}
+                        );
+                      })}
+                    </ul>
+                  )}
+                </td>
+              </tr>
+              <tr>
+                <td>Languages:</td>
+                <td>
+                  <ul>
+                    {Object.values(country.languages).map((each) => (
+                      <li> {each} </li>
+                    ))}
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>Independient</td>
+                <td>{country.independent ? "Yes" : "No"}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }

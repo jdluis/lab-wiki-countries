@@ -18,7 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
-              path="/countryDetails/:countryCode"
+              path="/countryDetails/:countryIdentification"
               element={<CountryDetails />}
             />
           </Routes>
