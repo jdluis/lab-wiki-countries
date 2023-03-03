@@ -6,16 +6,17 @@ import { useParams } from 'react-router-dom';
 function CountryDetails() {
   const [country, setCountry] = useState(null);
 
-  const countryIdentification = useParams();
+  const { alpha3Code } = useParams();
 
   useEffect(() => {
     getCountryByCode();
-  }, [countryIdentification]);
+  }, [alpha3Code]);
 
   const getCountryByCode = async () => {
     try {
-      const response = await axios(
-        `https://ih-countries-api.herokuapp.com/countries/${countryIdentification}`
+      //me falla la forma de poner la variable en la peticion, si pongo eol nombre directo si me lo hace
+      const response = await axios.get(
+        `https://ih-countries-api.herokuapp.com/countries/${alpha3Code}`
       );
       console.log('AQUIUIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
       console.log(response.data);
