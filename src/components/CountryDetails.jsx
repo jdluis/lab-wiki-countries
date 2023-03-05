@@ -6,7 +6,7 @@ import axios from 'axios';
 function CountryDetails() {
   const [country, setCountry] = useState(null);
 
-  let { countryIdentification } = useParams();
+  const { countryIdentification } = useParams();
 
   useEffect(() => {
     getCountryByCode();
@@ -14,7 +14,6 @@ function CountryDetails() {
 
   const getCountryByCode = async () => {
     try {
-      //me falla la forma de poner la variable en la peticion, si pongo eol nombre directo si me lo hace
       const response = await axios.get(
         `https://ih-countries-api.herokuapp.com/countries/${countryIdentification}`
       );
